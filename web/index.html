@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+  crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+        <label id="timeLabel">aa</label>
+        <div id="planesDiv"></div>
+    </body>
+    <script type="text/javascript">
+    	var bestSol = JSON.parse('[ { "penB": 30, "penA": 30, "seperation": [ 15, 15, 99999, 8, 8, 8, 8, 8, 8, 8 ], "number": 2, "apperanceTime": 14, "earliestLandindgTime": 94, "targetLandingTime": 98, "latestLandingTime": 102, "scheduledLandingTime": 98, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 99999, 8, 8, 8, 8, 8, 8 ], "number": 3, "apperanceTime": 21, "earliestLandindgTime": 96, "targetLandingTime": 106, "latestLandingTime": 107, "scheduledLandingTime": 107, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 99999, 8, 8, 8, 8, 8 ], "number": 4, "apperanceTime": 35, "earliestLandindgTime": 122, "targetLandingTime": 123, "latestLandingTime": 135, "scheduledLandingTime": 123, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 8, 99999, 8, 8, 8, 8 ], "number": 5, "apperanceTime": 45, "earliestLandindgTime": 133, "targetLandingTime": 135, "latestLandingTime": 158, "scheduledLandingTime": 133, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 8, 8, 99999, 8, 8, 8 ], "number": 6, "apperanceTime": 49, "earliestLandindgTime": 124, "targetLandingTime": 138, "latestLandingTime": 141, "scheduledLandingTime": 141, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 8, 8, 8, 99999, 8, 8 ], "number": 7, "apperanceTime": 51, "earliestLandindgTime": 126, "targetLandingTime": 140, "latestLandingTime": 151, "scheduledLandingTime": 151, "type": -1, "hasLanded": false }, { "penB": 10, "penA": 10, "seperation": [ 99999, 3, 15, 15, 15, 15, 15, 15, 15, 15 ], "number": 0, "apperanceTime": 54, "earliestLandindgTime": 129, "targetLandingTime": 155, "latestLandingTime": 168, "scheduledLandingTime": 168, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 8, 8, 8, 8, 99999, 8 ], "number": 8, "apperanceTime": 60, "earliestLandindgTime": 135, "targetLandingTime": 150, "latestLandingTime": 185, "scheduledLandingTime": 185, "type": -1, "hasLanded": false }, { "penB": 30, "penA": 30, "seperation": [ 15, 15, 8, 8, 8, 8, 8, 8, 8, 99999 ], "number": 9, "apperanceTime": 85, "earliestLandindgTime": 160, "targetLandingTime": 180, "latestLandingTime": 195, "scheduledLandingTime": 195, "type": -1, "hasLanded": false }, { "penB": 10, "penA": 10, "seperation": [ 3, 99999, 15, 15, 15, 15, 15, 15, 15, 15 ], "number": 1, "apperanceTime": 120, "earliestLandindgTime": 255, "targetLandingTime": 258, "latestLandingTime": 276, "scheduledLandingTime": 255, "type": -1, "hasLanded": false } ]');
+
+    	visualize();
+
+		var planeCount = 0;
+
+		
+
+
+		function visualize(){
+
+			for (var i = 0; i < bestSol[bestSol.length - 1].scheduledLandingTime; i++) {
+				
+				$("#timeLabel").text(i);
+				
+				bestSol.forEach(function(aircraft) {
+  						if (aircraft.apperanceTime == i) {
+  							setTimeout(function(){$("#planesDiv").append("<img src='http://icons.iconarchive.com/icons/unclebob/spanish-travel/1024/plane-icon.png' style='width:50px;height:50px;'>");}, i*1000);
+  						
+  						}
+  					});
+				
+
+			}
+
+		}
+
+    </script
+</html>

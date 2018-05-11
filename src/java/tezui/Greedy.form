@@ -32,7 +32,7 @@
                               <Component id="numberOfPlanesLbl" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="675" max="32767" attributes="0"/>
+                      <EmptySpace pref="577" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
@@ -48,6 +48,11 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="fcfsTimeLbl" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -83,7 +88,12 @@
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="totalTimeLbl" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="247" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="fcfsTimeLbl" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="225" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -101,7 +111,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Toplam Ge&#xe7;en S&#xfc;re"/>
+        <Property name="text" type="java.lang.String" value="A&#xe7;g&#xf6;zl&#xfc; Algoritma ile Toplam S&#xfc;re"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="totalTimeLbl">
@@ -178,6 +188,16 @@
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="text" type="java.lang.String" value="Zaman:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&#x130;G&#x130;H Durumu:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="fcfsTimeLbl">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
     </Component>
   </SubComponents>

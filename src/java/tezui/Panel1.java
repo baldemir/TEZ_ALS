@@ -150,6 +150,8 @@ public class Panel1 extends javax.swing.JPanel {
 
         }
     }
+    
+    
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
@@ -157,7 +159,7 @@ public class Panel1 extends javax.swing.JPanel {
         planeCount = 0;
         timeCount = 0;
         try {
-            for (int i = 13; i <= bestSol.get(bestSol.size() - 1).getScheduledLandingTime(); i++) {
+            for (int i = 0; i <= bestSol.get(bestSol.size() - 1).getScheduledLandingTime(); i++) {
 
                 timeLbl.setText(i + "");
                 planesOnAirPanel.removeAll();

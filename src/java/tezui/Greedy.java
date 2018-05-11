@@ -45,6 +45,7 @@ public class Greedy extends javax.swing.JPanel {
             waitingQueue.add(i);
         }
         WAITING_TIMES = createSample(10);
+        fcfsTimeLbl.setText(""+ fcfs(WAITING_TIMES, waitingQueue));
         greedyWithObjects(createSample(10), waitingQueue, 10);
         
         
@@ -83,6 +84,18 @@ public class Greedy extends javax.swing.JPanel {
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
+    
+    public static int fcfs(int[][] waitingTimes, List<Integer> waitingQueue) {
+        int T=0;
+        int lastPlane=-1;
+        for(int plane: waitingQueue){
+            if(lastPlane!=-1){
+                T += waitingTimes[lastPlane -1][plane -1];
+            }
+            lastPlane = plane;
+        }
+        return T;
+    }
 
     public static int greedyWithObjects(int[][] waitingTimes, List<Integer> waitingQueue, int N) {
 
@@ -288,12 +301,14 @@ public class Greedy extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        fcfsTimeLbl = new javax.swing.JLabel();
 
         jLabel1.setText("Uçak Sayısı:");
 
         numberOfPlanesLbl.setText("0");
 
-        jLabel3.setText("Toplam Geçen Süre");
+        jLabel3.setText("Açgözlü Algoritma ile Toplam Süre");
 
         totalTimeLbl.setText("0");
 
@@ -339,6 +354,10 @@ public class Greedy extends javax.swing.JPanel {
 
         jLabel7.setText("Zaman:");
 
+        jLabel5.setText("İGİH Durumu:");
+
+        fcfsTimeLbl.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,7 +375,7 @@ public class Greedy extends javax.swing.JPanel {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(numberOfPlanesLbl)))
-                        .addContainerGap(675, Short.MAX_VALUE))
+                        .addContainerGap(577, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(262, 262, 262)
                         .addComponent(jLabel7)
@@ -369,7 +388,11 @@ public class Greedy extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fcfsTimeLbl)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -396,7 +419,11 @@ public class Greedy extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(totalTimeLbl))
-                .addGap(247, 247, 247))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(fcfsTimeLbl))
+                .addGap(225, 225, 225))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -415,11 +442,13 @@ public class Greedy extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel fcfsTimeLbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel numberOfPlanesLbl;
     private javax.swing.JPanel planesDownPanel;

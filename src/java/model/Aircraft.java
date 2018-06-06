@@ -9,6 +9,7 @@ public class Aircraft {
 	private int scheduledLandingTime;
 	private int type;
 	private boolean hasLanded;
+        private int[] seperation;
 	
 	public Aircraft(int number, int elt, int tlt, int llt, int type){
 		this.number = number;
@@ -115,6 +116,18 @@ public class Aircraft {
 
 	public void setLatestLandingTime(int latestLandingTime) {
 		this.latestLandingTime = latestLandingTime;
+	}
+        
+        public int getSeperation(int i){
+		return seperation[i];
+	}
+
+	public int[] getSeperation() {
+		return seperation;
+	}
+
+	public void setSeperation(int[] seperation) {
+		this.seperation = seperation;
 	}
 	
 }

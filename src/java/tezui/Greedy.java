@@ -48,6 +48,15 @@ public class Greedy extends javax.swing.JPanel {
         fcfsTimeLbl.setText(""+ fcfs(WAITING_TIMES, waitingQueue));
         greedyWithObjects(createSample(10), waitingQueue, 10);
         
+        for (int aircraft : waitingQueue) {
+            JLabel lbl = new JLabel();
+            lbl.setPreferredSize(new Dimension(70, 70));
+            lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
+            lbl.setText("" + aircraft);
+            lbl.setIcon(new ImageIcon(getClass().getResource("plane_red.png")));
+            planesOnAirPanel.add(lbl);
+        }
+        
         
     }
     private static int[][] WAITING_TIMES;
@@ -227,7 +236,7 @@ public class Greedy extends javax.swing.JPanel {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText("" + aircraft.getType());
+                        lbl.setText("" + aircraft.getType()+1);
                         if(lastLandingPlane == null || lastLandingPlane.getActualLandingTime() + WAITING_TIMES[lastLandingPlaneType][aircraft.getType()] <= i){//uçak inebilir
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_green.png")));
                         }else{

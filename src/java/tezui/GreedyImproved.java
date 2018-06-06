@@ -5,6 +5,7 @@
  */
 package tezui;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import greedy.AircraftGreedy;
 import java.awt.Color;
 import java.awt.Component;
@@ -20,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import model.Aircraft;
 
 import model.AircraftExt;
 import model.ImportAircraftExt;
@@ -33,45 +35,103 @@ import sorting.PopulationHeuristic;
  */
 public class GreedyImproved extends javax.swing.JPanel {
 
+    static List<AircraftGreedy> fcfsResult = new ArrayList<>();
+
     /**
      * Creates new form Panel1
      */
     public GreedyImproved() {
         initComponents();
         List<Integer> waitingQueue = new ArrayList<>();
-        int[] ints = {1, 1, 2, 1, 3, 2, 3};
-        //int[] ints = {1, 1, 3, 2, 3, 2, 2};
+//        int[] ints = {1, 1, 2, 1, 3, 2, 3};
+//        int[] ints = {1, 4, 1, 3, 2, 4, 2};
+        int[] ints = {2, 1, 3, 1, 4, 2, 1};
+        
         for (int i : ints) {
             waitingQueue.add(i);
         }
         WAITING_TIMES = createSample(10);
-        greedyImproved(createSample(10), waitingQueue, 10);
+        int[] fcfsRes = fcfs(WAITING_TIMES, waitingQueue);
+        fcfsLateLandingLbl.setText("" + fcfsRes[0]);
+        fcfsTimeLbl.setText("" + fcfsRes[1]);
+        int impRes = greedyImproved(createSample(10), waitingQueue, 10);
+
+        totalTimeLbl.setText(impRes + "");
+        numberOfPlanesLbl.setText(waitingQueue.size() + "");
+
+        for (int aircraft : waitingQueue) {
+            JLabel lbl = new JLabel();
+            lbl.setPreferredSize(new Dimension(70, 70));
+            lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
+            lbl.setText("" + aircraft);
+            lbl.setIcon(new ImageIcon(getClass().getResource("plane_red.png")));
+            planesOnAirPanel.add(lbl);
+        }
+
+        DefaultTableModel model = (DefaultTableModel) resultTableFCFS.getModel();
+        for (AircraftGreedy aircraft : fcfsResult) {
+            model.addRow(new Object[]{aircraft.getCount() + 1, aircraft.getType(), aircraft.getActualLandingTime(), aircraft.getLatestLandingTime()});
+        }
+        DefaultTableModel model2 = (DefaultTableModel) resultTableGreedy.getModel();
+        for (AircraftGreedy aircraft : bestSol) {
+            model2.addRow(new Object[]{aircraft.getOrder() + 1, aircraft.getType() + 1, aircraft.getActualLandingTime(), aircraft.getLatestLandingTime()});
+        }
 
     }
     private static int[][] WAITING_TIMES;
 
     public static int[][] createSample(int typeN) {
-//        int[][] sample = new int[typeN][typeN];
-//        Random rand = new Random();
-
-//        for (int i = 0; i < typeN; i++) {
-//            for (int j = 0; j < typeN; j++) {
-//                int randomNum = rand.nextInt(15);
-//                sample[i][j] = randomNum;
-//            }
-//        }
-        //int[][] sample = {{2, 1}, {14, 8}};
-        //int[][] sample = {{99999,3,15,15,15,15,15,15,15,15},{3,99999,15,15,15,15,15,15,15,15},{15,15,99999,8,8,8,8,8,8,8},{15,15,8,99999,8,8,8,8,8,8},{15,15,8,8,99999,8,8,8,8,8},{15,15,8,8,8,99999,8,8,8,8},{15,15,8,8,8,8,99999,8,8,8},{15,15,8,8,8,8,8,99999,8,8},{15,15,8,8,8,8,8,8,99999,8},{15,15,8,8,8,8,8,8,8,99999}};
 //        int[][] sample = {
 //            {1, 5, 1},
 //            {4, 2, 3},
 //            {3, 17, 4}};
+//        int[][] sample = {
+//            {1, 5, 4},
+//            {3, 7, 2},
+//            {6, 4, 1}};
+        
+//        int[][] sample = {
+//            {2, 4, 1, 3},
+//            {1, 12, 3, 6},
+//            {13, 7, 4, 2},
+//            {1, 2, 6, 8}};
         int[][] sample = {
-            {1, 5, 4},
-            {3, 7, 2},
-            {6, 4, 1}};
+            {4, 2, 13, 2},
+            {3, 11, 13, 4},
+            {1, 2, 2, 12},
+            {5, 1, 2, 4}};
+        
 
         return sample;
+    }
+
+    public static int[] fcfs(int[][] waitingTimes, List<Integer> waitingQueue) {
+        int T = 0;
+        int lastPlane = -1;
+        int countLate = 0;
+        int i = 0;
+        for (int plane : waitingQueue) {
+
+            if (lastPlane != -1) {
+                T += waitingTimes[lastPlane - 1][plane - 1];
+            }
+            if (T > latestTimes[i]) {
+                countLate++;
+            }
+            AircraftGreedy a = new AircraftGreedy();
+            a.setActualLandingTime(T);
+            a.setLatestLandingTime(latestTimes[i]);
+            a.setCount(i);
+            a.setType(plane);
+            a.setOrder(i);
+            fcfsResult.add(a);
+
+            lastPlane = plane;
+            i++;
+        }
+        int[] res = {countLate, T};
+
+        return res;
     }
     static List<AircraftGreedy> bestSol = null;
     private ImportAircraftExt ia;
@@ -82,9 +142,10 @@ public class GreedyImproved extends javax.swing.JPanel {
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
-
+    static int latestTimes[] = {5, 10, 7, 12, 18, 15, 20};
+//    static int latestTimes[] = {7, 11, 5, 14, 19, 14, 18};
     public static int greedyImproved(int[][] waitingTimes, List<Integer> waitingQueue, int N) {
-        int latestTimes[] = {5, 10, 7, 12, 18, 15, 20};
+
         int min = Integer.MAX_VALUE;
         int minI = 0, minJ = 0;
         int counter = 0;
@@ -228,7 +289,7 @@ public class GreedyImproved extends javax.swing.JPanel {
             System.out.println(a.getOrder() + " " + a.getType() + "-" + a.getLatestLandingTime() + " " + a.getActualLandingTime());
         }
         bestSol = planes;
-        return 0;
+        return T;
     }
 
     public static int isAnyExpiringAircraft(int time, List<AircraftGreedy> planes, int[][] waitingTimes, int candidateType, int lastPlane) {
@@ -361,6 +422,7 @@ public class GreedyImproved extends javax.swing.JPanel {
     }
 
     public void visualizeResult(List<AircraftGreedy> planes) {
+        planesOnAirPanel.removeAll();
         numberOfPlanesLbl.setText(planes.size() + "");
         planeCount = 0;
         timeCount = 0;
@@ -385,7 +447,7 @@ public class GreedyImproved extends javax.swing.JPanel {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText("" + aircraft.getType());
+                        lbl.setText((aircraft.getType()+1)+"");
                         if (lastLandingPlane == null || lastLandingPlane.getActualLandingTime() + WAITING_TIMES[lastLandingPlaneType][aircraft.getType()] <= i) {//uçak inebilir
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_green.png")));
                         } else {
@@ -409,7 +471,7 @@ public class GreedyImproved extends javax.swing.JPanel {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesDownPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText("" + aircraft.getType());
+                        lbl.setText("" + (aircraft.getType()+1));
                         if (aircraft.getActualLandingTime() <= aircraft.getLatestLandingTime()) {
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_black.png")));
                         } else {
@@ -463,6 +525,50 @@ public class GreedyImproved extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        fcfsTimeLbl = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        fcfsLateLandingLbl = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        resultTableGreedy = new javax.swing.JTable(){
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+                int row, int column) {
+                JLabel label = (JLabel) super.prepareRenderer(renderer, row, column);
+
+                if(column == 2){
+                    if(bestSol.get(row).getActualLandingTime() <= bestSol.get(row).getLatestLandingTime()) {
+                        label.setBackground(Color.GREEN);
+                    }else{
+                        label.setBackground(Color.RED);
+                    }
+                }else{
+                    label.setBackground(Color.GRAY);
+                }
+
+                return label;
+            }
+        };
+        jScrollPane3 = new javax.swing.JScrollPane();
+        resultTableFCFS = new javax.swing.JTable(){
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+                int row, int column) {
+                JLabel label = (JLabel) super.prepareRenderer(renderer, row, column);
+
+                if(column == 2){
+                    if(fcfsResult.get(row).getActualLandingTime() <= fcfsResult.get(row).getLatestLandingTime()) {
+                        label.setBackground(Color.GREEN);
+                    }else{
+                        label.setBackground(Color.RED);
+                    }
+                }else{
+                    label.setBackground(Color.GRAY);
+                }
+
+                return label;
+            }
+        };
 
         jLabel1.setText("Uçak Sayısı:");
 
@@ -514,6 +620,34 @@ public class GreedyImproved extends javax.swing.JPanel {
 
         jLabel7.setText("Zaman:");
 
+        jLabel5.setText("İGİH ile EGİZ'den sonra inen uçak sayısı:");
+
+        fcfsTimeLbl.setText("0");
+
+        jLabel6.setText("İGİH Durumu");
+
+        fcfsLateLandingLbl.setText("0");
+
+        resultTableGreedy.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sıra", "Tip", "İniş Zamanı", "EGİZ",
+            }
+        ));
+        jScrollPane2.setViewportView(resultTableGreedy);
+
+        resultTableFCFS.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sıra", "Tip", "İniş Zamanı", "EGİZ"
+            }
+        ));
+        jScrollPane3.setViewportView(resultTableFCFS);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -541,11 +675,25 @@ public class GreedyImproved extends javax.swing.JPanel {
                         .addComponent(jButton1))
                     .addComponent(planesOnAirPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(planesDownPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(12, 12, 12)
+                                .addComponent(fcfsTimeLbl))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fcfsLateLandingLbl)))
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane3)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,7 +707,7 @@ public class GreedyImproved extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(planesOnAirPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(planesDownPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,7 +719,22 @@ public class GreedyImproved extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(totalTimeLbl))
-                .addGap(247, 247, 247))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fcfsTimeLbl)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(fcfsLateLandingLbl))
+                .addGap(205, 205, 205))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(660, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -590,15 +753,23 @@ public class GreedyImproved extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel fcfsLateLandingLbl;
+    private javax.swing.JLabel fcfsTimeLbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel numberOfPlanesLbl;
     private javax.swing.JPanel planesDownPanel;
     private javax.swing.JPanel planesOnAirPanel;
+    private javax.swing.JTable resultTableFCFS;
+    private javax.swing.JTable resultTableGreedy;
     private javax.swing.JLabel timeLbl;
     private javax.swing.JLabel totalTimeLbl;
     // End of variables declaration//GEN-END:variables

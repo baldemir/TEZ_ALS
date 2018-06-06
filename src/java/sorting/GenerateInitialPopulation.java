@@ -32,6 +32,17 @@ public class GenerateInitialPopulation {
 		this.airList = airList;
 		createRandomPopulationExt(number);
 	}
+        public Aircraft getLastLandedAircraft(Solution sol){
+            int lastTime=-1;
+            Aircraft lastPlane = null;
+            for(Aircraft a:sol.getList()){
+                if(a.isHasLanded() && a.getScheduledLandingTime() > lastTime){
+                    lastTime = a.getScheduledLandingTime();
+                    lastPlane = a;
+                }
+            }
+            return lastPlane;
+        }
 	
 	public void createRandomPopulation(int number){
 		Solution sol;
@@ -47,6 +58,7 @@ public class GenerateInitialPopulation {
 				temp = it.next();
 				window = temp.getLatestLandingTime()-temp.getEarliestLandindgTime();
 				landing = temp.getEarliestLandindgTime()+rand.nextInt(window);
+                                
 				if(temp.getApperanceTime()!=-1)
 					new_aircraft = Aircraft.createNewAircraftAPP(temp);
 				else

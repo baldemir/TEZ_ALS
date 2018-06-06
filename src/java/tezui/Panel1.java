@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import javafx.scene.media.AudioClip;
 import javax.swing.ImageIcon;
@@ -47,6 +48,7 @@ public class Panel1 extends javax.swing.JPanel {
         best = new Solution();
         ia = new ImportAircraftExt(filename);
         list = ia.getAircraftList();
+        
         firstIteration();
     }
 
@@ -147,10 +149,18 @@ public class Panel1 extends javax.swing.JPanel {
             for (Aircraft aircraft : best.getList()) {
                 model.addRow(new Object[]{aircraft.getApperanceTime(), aircraft.getEarliestLandindgTime(), aircraft.getLatestLandingTime(), aircraft.getScheduledLandingTime(), aircraft.getNumber()});
             }
+            fcfs(best.getList());
 
         }
     }
-    
+    public int fcfs(ArrayList<Aircraft> list){
+        int T=0;
+        int lastPlane = -1;
+        for(Aircraft plane:list){
+            System.out.println(plane.getSeperation().length);
+        }
+        return 0;
+    }
     
     int planeCount = 0;
     int timeCount = 0;
@@ -159,7 +169,7 @@ public class Panel1 extends javax.swing.JPanel {
         planeCount = 0;
         timeCount = 0;
         try {
-            for (int i = 0; i <= bestSol.get(bestSol.size() - 1).getScheduledLandingTime(); i++) {
+            for (int i = 90; i <= bestSol.get(bestSol.size() - 1).getScheduledLandingTime(); i++) {
 
                 timeLbl.setText(i + "");
                 planesOnAirPanel.removeAll();

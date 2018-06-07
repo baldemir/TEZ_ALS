@@ -39,15 +39,16 @@ public class Greedy extends javax.swing.JPanel {
     public Greedy() {
         initComponents();
         List<Integer> waitingQueue = new ArrayList<>();
-        int[] ints = {1, 1, 2, 1, 3, 2, 3};
+        //int[] ints = {1, 1, 2, 1, 3, 2, 3};
         //int[] ints = {1, 1, 3, 2, 3, 2, 2};
+        int[] ints = {3, 4, 5, 6, 7, 8, 1, 9, 10, 2};
         for (int i : ints) {
             waitingQueue.add(i);
         }
         WAITING_TIMES = createSample(10);
-        fcfsTimeLbl.setText(""+ fcfs(WAITING_TIMES, waitingQueue));
+        fcfsTimeLbl.setText("" + fcfs(WAITING_TIMES, waitingQueue));
         greedyWithObjects(createSample(10), waitingQueue, 10);
-        
+
         for (int aircraft : waitingQueue) {
             JLabel lbl = new JLabel();
             lbl.setPreferredSize(new Dimension(70, 70));
@@ -56,8 +57,7 @@ public class Greedy extends javax.swing.JPanel {
             lbl.setIcon(new ImageIcon(getClass().getResource("plane_red.png")));
             planesOnAirPanel.add(lbl);
         }
-        
-        
+
     }
     private static int[][] WAITING_TIMES;
 
@@ -77,11 +77,20 @@ public class Greedy extends javax.swing.JPanel {
 //            {1, 5, 1},
 //            {4, 2, 3},
 //            {3, 17, 4}};
-        int[][] sample = {
-            {1, 5, 4},
-            {3, 7, 2},
-            {6, 4, 1}};
-
+//        int[][] sample = {
+//            {1, 5, 4},
+//            {3, 7, 2},
+//            {6, 4, 1}};
+        int[][] sample = {{99999, 3, 15, 15, 15, 15, 15, 15, 15, 15},
+        {3, 99999, 15, 15, 15, 15, 15, 15, 15, 15},
+        {15, 15, 99999, 8, 8, 8, 8, 8, 8, 8},
+        {15, 15, 8, 99999, 8, 8, 8, 8, 8, 8},
+        {15, 15, 8, 8, 99999, 8, 8, 8, 8, 8},
+        {15, 15, 8, 8, 8, 99999, 8, 8, 8, 8},
+        {15, 15, 8, 8, 8, 8, 99999, 8, 8, 8},
+        {15, 15, 8, 8, 8, 8, 8, 99999, 8, 8},
+        {15, 15, 8, 8, 8, 8, 8, 8, 99999, 8},
+        {15, 15, 8, 8, 8, 8, 8, 8, 8, 99999}};
         return sample;
     }
     static List<AircraftGreedy> bestSol = null;
@@ -93,13 +102,13 @@ public class Greedy extends javax.swing.JPanel {
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
-    
+
     public static int fcfs(int[][] waitingTimes, List<Integer> waitingQueue) {
-        int T=0;
-        int lastPlane=-1;
-        for(int plane: waitingQueue){
-            if(lastPlane!=-1){
-                T += waitingTimes[lastPlane -1][plane -1];
+        int T = 0;
+        int lastPlane = -1;
+        for (int plane : waitingQueue) {
+            if (lastPlane != -1) {
+                T += waitingTimes[lastPlane - 1][plane - 1];
             }
             lastPlane = plane;
         }
@@ -116,7 +125,7 @@ public class Greedy extends javax.swing.JPanel {
             plane.setLanded(false);
             planes.add(plane);
         }
-        
+
         int order = 0;
         int min = Integer.MAX_VALUE;
         int minI = 0, minJ = 0;
@@ -155,7 +164,7 @@ public class Greedy extends javax.swing.JPanel {
                 typeCounts[minI] -= 1;
                 typeCounts[minJ] -= 1;
                 T += waitingTimes[minI][minJ];
-                int a2 = getWaitingAircraftWithType(planes, minI);
+                int a2 = getWaitingAircraftWithType(planes, minJ);
                 planes.get(a2).setActualLandingTime(T);
                 planes.get(a2).setLanded(true);
                 planes.get(a2).setOrder(order++);
@@ -212,19 +221,19 @@ public class Greedy extends javax.swing.JPanel {
     }
 
     public void visualizeResult(List<AircraftGreedy> planes) {
-        numberOfPlanesLbl.setText(planes.size()+"");
+        numberOfPlanesLbl.setText(planes.size() + "");
         planeCount = 0;
         timeCount = 0;
         int lastLandingPlaneOrder = -1;
         int lastLandingPlaneType = -1;
-        AircraftGreedy lastLandingPlane =null;
+        AircraftGreedy lastLandingPlane = null;
         int maxLandingTime = Integer.MIN_VALUE;
         for (AircraftGreedy plane : planes) {
             if (plane.getActualLandingTime() > maxLandingTime) {
                 maxLandingTime = plane.getActualLandingTime();
             }
         }
-        totalTimeLbl.setText(maxLandingTime+"");
+        totalTimeLbl.setText(maxLandingTime + "");
         try {
             for (int i = 0; i <= maxLandingTime; i++) {
                 timeLbl.setText(i + "");
@@ -236,10 +245,10 @@ public class Greedy extends javax.swing.JPanel {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText("" + aircraft.getType()+1);
-                        if(lastLandingPlane == null || lastLandingPlane.getActualLandingTime() + WAITING_TIMES[lastLandingPlaneType][aircraft.getType()] <= i){//uçak inebilir
+                        lbl.setText("" + aircraft.getType() + 1);
+                        if (lastLandingPlane == null || lastLandingPlane.getActualLandingTime() + WAITING_TIMES[lastLandingPlaneType][aircraft.getType()] <= i) {//uçak inebilir
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_green.png")));
-                        }else{
+                        } else {
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_red.png")));
                         }
 
@@ -252,7 +261,7 @@ public class Greedy extends javax.swing.JPanel {
                 Collections.sort(orderedPlanes, new Comparator<AircraftGreedy>() {
 
                     public int compare(AircraftGreedy o1, AircraftGreedy o2) {
-                        return o1.getOrder()-o2.getOrder();
+                        return o1.getOrder() - o2.getOrder();
                     }
                 });
                 for (AircraftGreedy aircraft : orderedPlanes) {

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Iterator;
 import javafx.scene.media.AudioClip;
@@ -39,15 +40,19 @@ public class Panel1 extends javax.swing.JPanel {
     ArrayList<Aircraft> bestSol = null;
     private ImportAircraftExt ia;
     private ArrayList<Aircraft> list;
+    private ArrayList<Aircraft> firstList;
     private Solution best;
     private int populationSize, iterations;
+    
 
-    public void Test3(String filename, int populationSize, int iterations) {
+    public void Test3(String filename, int populationSize, int iterations)  {
         this.populationSize = populationSize;
         this.iterations = iterations;
         best = new Solution();
         ia = new ImportAircraftExt(filename);
         list = ia.getAircraftList();
+        
+        firstList = new ArrayList<Aircraft>(list);
         
         firstIteration();
     }
@@ -146,8 +151,9 @@ public class Panel1 extends javax.swing.JPanel {
             fitnessLbl.setText(best.getFitness()+"");
             bestSol = best.getList();
             DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
-            for (Aircraft aircraft : best.getList()) {
-                model.addRow(new Object[]{aircraft.getApperanceTime(), aircraft.getEarliestLandindgTime(), aircraft.getLatestLandingTime(), aircraft.getScheduledLandingTime(), aircraft.getNumber()});
+            for (int kk = 0;kk<best.getList().size(); kk++) {
+                Aircraft aircraft = best.getList().get(kk);
+                model.addRow(new Object[]{aircraft.getApperanceTime(), aircraft.getEarliestLandindgTime(), firstList.get(kk).getLatestLandingTime(), aircraft.getScheduledLandingTime(), aircraft.getNumber()});
             }
             fcfs(best.getList());
 

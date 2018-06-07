@@ -45,7 +45,8 @@ public class GreedyImproved extends javax.swing.JPanel {
         List<Integer> waitingQueue = new ArrayList<>();
 //        int[] ints = {1, 1, 2, 1, 3, 2, 3};
 //        int[] ints = {1, 4, 1, 3, 2, 4, 2};
-        int[] ints = {2, 1, 3, 1, 4, 2, 1};
+//        int[] ints = {2, 1, 3, 1, 4, 2, 1};
+        int[] ints = {3, 4, 5, 6, 7, 8, 1, 9, 10, 2};
         
         for (int i : ints) {
             waitingQueue.add(i);
@@ -95,12 +96,21 @@ public class GreedyImproved extends javax.swing.JPanel {
 //            {1, 12, 3, 6},
 //            {13, 7, 4, 2},
 //            {1, 2, 6, 8}};
-        int[][] sample = {
-            {4, 2, 13, 2},
-            {3, 11, 13, 4},
-            {1, 2, 2, 12},
-            {5, 1, 2, 4}};
-        
+//        int[][] sample = {
+//            {4, 2, 13, 2},
+//            {3, 11, 13, 4},
+//            {1, 2, 2, 12},
+//            {5, 1, 2, 4}};
+        int[][] sample = {{99999, 3, 15, 15, 15, 15, 15, 15, 15, 15},
+        {3, 99999, 15, 15, 15, 15, 15, 15, 15, 15},
+        {15, 15, 99999, 8, 8, 8, 8, 8, 8, 8},
+        {15, 15, 8, 99999, 8, 8, 8, 8, 8, 8},
+        {15, 15, 8, 8, 99999, 8, 8, 8, 8, 8},
+        {15, 15, 8, 8, 8, 99999, 8, 8, 8, 8},
+        {15, 15, 8, 8, 8, 8, 99999, 8, 8, 8},
+        {15, 15, 8, 8, 8, 8, 8, 99999, 8, 8},
+        {15, 15, 8, 8, 8, 8, 8, 8, 99999, 8},
+        {15, 15, 8, 8, 8, 8, 8, 8, 8, 99999}};
 
         return sample;
     }
@@ -142,8 +152,9 @@ public class GreedyImproved extends javax.swing.JPanel {
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
-    static int latestTimes[] = {5, 10, 7, 12, 18, 15, 20};
+//    static int latestTimes[] = {5, 10, 7, 12, 18, 15, 20};
 //    static int latestTimes[] = {7, 11, 5, 14, 19, 14, 18};
+    static int latestTimes[] = {559, 744, 510, 521, 555, 576, 577, 573, 591, 657};
     public static int greedyImproved(int[][] waitingTimes, List<Integer> waitingQueue, int N) {
 
         int min = Integer.MAX_VALUE;

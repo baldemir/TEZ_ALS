@@ -17,7 +17,18 @@ public class AircraftGreedy implements Comparable<AircraftGreedy>{
     private int latestLandingTime;
     private boolean landed;
     private int actualLandingTime;
-
+    private int[] seperation;
+    
+    public AircraftGreedy(){
+        
+    }
+            
+    public AircraftGreedy(int order, int type, int llt, boolean landed){
+        this.order = order;
+        this.type = type;
+        this.latestLandingTime = llt;
+        this.landed = landed;
+    }
     /**
      * @return the type
      */
@@ -121,6 +132,20 @@ public class AircraftGreedy implements Comparable<AircraftGreedy>{
      */
     public void setActualLandingTime(int actualLandingTime) {
         this.actualLandingTime = actualLandingTime;
+    }
+
+    /**
+     * @return the seperation
+     */
+    public int[] getSeperation() {
+        return seperation;
+    }
+
+    /**
+     * @param seperation the seperation to set
+     */
+    public void setSeperation(int[] seperation) {
+        this.seperation = seperation;
     }
     
 }

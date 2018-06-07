@@ -1,4 +1,14 @@
-package model;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package greedy;
+
+/**
+ *
+ * @author ulakbim
+ */
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,12 +17,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import model.Aircraft;
+import model.AircraftExt;
 
-public class ImportAircraftExt {
-	private ArrayList<Aircraft> aircraftList;
+public class ImportAircraftGreedy {
+	private ArrayList<AircraftGreedy> aircraftList;
 	private int freeze, planes;
 	
-	public ImportAircraftExt(String filename){
+	public ImportAircraftGreedy(String filename){
 		aircraftList = extractAircrafts(readFile(filename));
 	}
 	
@@ -38,8 +50,8 @@ public class ImportAircraftExt {
 		return incomingAircrafts;
 	}
 	
-	public ArrayList<Aircraft> extractAircrafts(ArrayList incomingAircrafts){
-		aircraftList = new ArrayList<Aircraft>();
+	public ArrayList<AircraftGreedy> extractAircrafts(ArrayList incomingAircrafts){
+		aircraftList = new ArrayList<AircraftGreedy>();
 		int number=0, elt=0, tlt=0, llt=0, app=0;
 		double penB, penA;
 		
@@ -58,7 +70,7 @@ public class ImportAircraftExt {
 		while(it.hasNext()){
 			temp = new StringTokenizer((String)it.next());
 			int[] seperation = new int[planes];
-			AircraftExt aircraft;
+			AircraftGreedy aircraft;
 			
 			app = new Integer(temp.nextToken()).intValue();
 			elt = new Integer(temp.nextToken()).intValue();
@@ -66,7 +78,7 @@ public class ImportAircraftExt {
 			llt = new Integer(temp.nextToken()).intValue();
 			penB = new Double(temp.nextToken()).doubleValue();
 			penA = new Double(temp.nextToken()).doubleValue();
-			aircraft = new AircraftExt(number, app, elt, tlt, llt, penB, penA);
+			aircraft = new AircraftGreedy(number, number, 0, false);
 			number++;
 
 			//extract the seperation constraints
@@ -81,24 +93,24 @@ public class ImportAircraftExt {
 			aircraftList.add(aircraft);
 		}
 		//Sort the aircraftList using bubble sort
-		Boolean swapped = true;
-		while(swapped==true){
-			swapped=false;
-			for(int i=0; i<aircraftList.size()-1;i++){
-				Aircraft a = aircraftList.get(i);
-				Aircraft b = aircraftList.get(i+1);
-				if(a.getEarliestLandindgTime() > b.getEarliestLandindgTime()){
-					aircraftList.set(i, b);
-					aircraftList.set(i+1, a);
-					swapped=true;
-				}
-			}
-		}
+//		Boolean swapped = true;
+//		while(swapped==true){
+//			swapped=false;
+//			for(int i=0; i<aircraftList.size()-1;i++){
+//				AircraftGreedy a = aircraftList.get(i);
+//				AircraftGreedy b = aircraftList.get(i+1);
+//				if(a.getEarliestLandindgTime() > b.getEarliestLandindgTime()){
+//					aircraftList.set(i, b);
+//					aircraftList.set(i+1, a);
+//					swapped=true;
+//				}
+//			}
+//		}
 			
 		return aircraftList;
 	}
 
-	public ArrayList<Aircraft> getAircraftList() {
+	public ArrayList<AircraftGreedy> getAircraftList() {
 		return aircraftList;
 	}
 
@@ -110,3 +122,4 @@ public class ImportAircraftExt {
 		return planes;
 	}
 }
+

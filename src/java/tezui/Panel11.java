@@ -35,7 +35,7 @@ public class Panel11 extends javax.swing.JPanel {
      */
     public Panel11() {
         initComponents();
-        Test3("/Users/ulakbim/Downloads/Aircraftlanding/airland3.txt", 500, 10);
+        Test3("/Users/ulakbim/Downloads/Aircraftlanding/airland3.txt", 5000, 100);
     }
     ArrayList<Aircraft> bestSol = null;
     private ImportAircraftExt ia;
@@ -43,59 +43,61 @@ public class Panel11 extends javax.swing.JPanel {
     private ArrayList<Aircraft> firstList;
     private Solution best;
     private int populationSize, iterations;
-    
 
-    public void Test3(String filename, int populationSize, int iterations)  {
+    public void Test3(String filename, int populationSize, int iterations) {
         this.populationSize = populationSize;
         this.iterations = iterations;
         best = new Solution();
         ia = new ImportAircraftExt(filename);
         list = ia.getAircraftList();
-        
+
         firstList = new ArrayList<Aircraft>(list);
         long startTime = System.nanoTime();
         firstIteration();
-        long endTime   = System.nanoTime();
+        long endTime = System.nanoTime();
         long totalTime = endTime - startTime;
         System.out.println("Total Time: " + totalTime);
+        DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
+        for (int kk = 0; kk < best.getList().size(); kk++) {
+            Aircraft aircraft = best.getList().get(kk);
+            model.addRow(new Object[]{aircraft.getApperanceTime(), aircraft.getEarliestLandindgTime(), firstList.get(kk).getLatestLandingTime(), aircraft.getScheduledLandingTime(), aircraft.getNumber()});
+        }
     }
 
     public void firstIteration() {
         Solution bestGip = new Solution();
         Solution temp = new Solution();
 
-        int k = 0;
-        while (k++ < 1) {
-            GenerateInitialPopulation gip = new GenerateInitialPopulation(populationSize, list);
-            PopulationHeuristic ph = new PopulationHeuristic(gip.getPopulation(), "scheduled");
+        GenerateInitialPopulation gip = new GenerateInitialPopulation(populationSize, list);
+        PopulationHeuristic ph = new PopulationHeuristic(gip.getPopulation(), "scheduled");
 
-            int j = 0;
+        int j = 0;
 
-            Solution sol;
-            bestGip = gip.getBestSolution();
+        Solution sol;
+        bestGip = gip.getBestSolution();
 
-            if (bestGip.getFitness() < best.getFitness()) {
-                best = bestGip;
-            }
+        if (bestGip.getFitness() < best.getFitness()) {
+            best = bestGip;
+        }
 
-            while (j < iterations) {
-                sol = ph.createChild();
-                ph.populationReplacementExt(sol);
-                if (sol.getUnfitness() == 0) {
-                    temp = sol;
-                    if (sol.getFitness() < best.getFitness()) {
-                        best = sol;
-                        j = 0;
-                    }
+        while (j < iterations) {
+            sol = ph.createChild();
+            ph.populationReplacementExt(sol);
+            if (sol.getUnfitness() == 0) {
+                temp = sol;
+                if (sol.getFitness() < best.getFitness()) {
+                    best = sol;
+                    j = 0;
                 }
-                j++;
             }
+            j++;
         }
-        if (best.getUnfitness() == 0) {
-            tightening(best);
-        } else {
-            tightening(temp);
-        }
+
+//        if (best.getUnfitness() == 0) {
+//            tightening(best);
+//        } else {
+//            tightening(temp);
+//        }
     }
 
     public void tightening(Solution sol) {
@@ -150,30 +152,27 @@ public class Panel11 extends javax.swing.JPanel {
         } else {
             //System.out.println("Best solution: " + best.getFitness());
             //System.out.println(best.toString());
-            numberOfPlanesLbl.setText(best.getList().size()+ "");
-            fitnessLbl.setText(best.getFitness()+"");
+            numberOfPlanesLbl.setText(best.getList().size() + "");
+            fitnessLbl.setText(best.getFitness() + "");
             bestSol = best.getList();
-            DefaultTableModel model = (DefaultTableModel) resultTable.getModel();
-            for (int kk = 0;kk<best.getList().size(); kk++) {
-                Aircraft aircraft = best.getList().get(kk);
-                model.addRow(new Object[]{aircraft.getApperanceTime(), aircraft.getEarliestLandindgTime(), firstList.get(kk).getLatestLandingTime(), aircraft.getScheduledLandingTime(), aircraft.getNumber()});
-            }
-//            fcfs(best.getList());
 
+//            fcfs(best.getList());
         }
     }
-    public int fcfs(ArrayList<Aircraft> list){
-        int T=0;
+
+    public int fcfs(ArrayList<Aircraft> list) {
+        int T = 0;
         int lastPlane = -1;
 //        for(Aircraft plane:list){
 //            //System.out.println(plane.getSeperation().length);
 //        }
         return 0;
     }
-    
+
     int planeCount = 0;
     int timeCount = 0;
     int planesInPanel = 0;
+
     public void visualizeResult() {
         planeCount = 0;
         timeCount = 0;
@@ -189,26 +188,26 @@ public class Panel11 extends javax.swing.JPanel {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesOnAirPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText(""+aircraft.getNumber());
-                        if(aircraft.getEarliestLandindgTime() <= i){//uçak inebilir
+                        lbl.setText("" + aircraft.getNumber());
+                        if (aircraft.getEarliestLandindgTime() <= i) {//uçak inebilir
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_green.png")));
-                        }else{
+                        } else {
                             lbl.setIcon(new ImageIcon(getClass().getResource("plane_red.png")));
                         }
-                        
+
                         planesOnAirPanel.add(lbl);
-                        
+
                         planeCount++;
                     }
-                    if(aircraft.getScheduledLandingTime()<=i){
+                    if (aircraft.getScheduledLandingTime() <= i) {
                         JLabel lbl = new JLabel();
                         lbl.setPreferredSize(new Dimension(70, 70));
                         lbl.setBounds(planesDownPanel.getComponentCount() * 70, 0, 70, 70);
-                        lbl.setText(""+aircraft.getNumber());
+                        lbl.setText("" + aircraft.getNumber());
                         lbl.setIcon(new ImageIcon(getClass().getResource("plane_black.png")));
                         planesDownPanel.add(lbl);
                     }
-                    
+
                 }
                 revalidate();
                 repaint();
@@ -396,7 +395,6 @@ public class Panel11 extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
 
         Thread t = new Thread(new ActuallyDoStuff());
         t.start();

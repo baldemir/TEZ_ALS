@@ -78,7 +78,7 @@ public class ImportAircraftGreedy {
 			llt = new Integer(temp.nextToken()).intValue();
 			penB = new Double(temp.nextToken()).doubleValue();
 			penA = new Double(temp.nextToken()).doubleValue();
-			aircraft = new AircraftGreedy(number, number, 0, false);
+			aircraft = new AircraftGreedy(number, number, llt, false);
 			number++;
 
 			//extract the seperation constraints

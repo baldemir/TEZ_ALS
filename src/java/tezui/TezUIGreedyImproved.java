@@ -73,7 +73,7 @@ public class TezUIGreedyImproved extends JApplet {
 //            }
 //        });
         
-        GreedyImproved panel = new GreedyImproved();
+        GreedyImprovedFile panel = new GreedyImprovedFile();
         panel.setPreferredSize(new Dimension(JFXPANEL_WIDTH_INT, JFXPANEL_HEIGHT_INT));
         add(panel, BorderLayout.CENTER);
         

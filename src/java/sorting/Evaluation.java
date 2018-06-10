@@ -33,15 +33,17 @@ public class Evaluation {
 		int sum=0, temp;
 		Iterator<Aircraft> it = sol.getList().iterator();
 		AircraftExt air;
-		
-		while(it.hasNext()){
-			air = (AircraftExt)it.next();
-			temp = air.getScheduledLandingTime()-air.getTargetLandingTime();
-			if(temp<0)
-				sum += Math.abs(temp*air.getPenB());
-			else
-				sum += temp*air.getPenA();
-		}		
+//		while(it.hasNext()){
+//			air = (AircraftExt)it.next();
+//			temp = air.getScheduledLandingTime()-air.getTargetLandingTime();
+//			if(temp<0)
+//				sum += Math.abs(temp*air.getPenB());
+//			else
+//				sum += temp*air.getPenA();
+                        
+//		}
+                sum = sol.getList().get(sol.getList().size()-1).getScheduledLandingTime();
+                
 		return sum;
 	}
 	

@@ -96,6 +96,7 @@ public class GenerateInitialPopulation {
 				new_aircraft.setScheduledLandingTime(landing);
 				sol.getList().add(new_aircraft);
 			}
+                        sol = tightenUpToSeperationTimes(sol);
 			sol.setFitness(eval.fintnessLinearExt(sol));
 			sol.setUnfitness(eval.unfitnessExt(sol));
 			//Finds the initial best solution
@@ -104,7 +105,23 @@ public class GenerateInitialPopulation {
 			population.add(sol);
 		}		
 	}
-	
+	public Solution tightenUpToSeperationTimes(Solution sol){
+            sol.sort("scheduled");
+            Aircraft last = null;
+            for(Aircraft air : sol.getList()){
+                int time = 0;
+                if(last != null){
+                    time = last.getSeperation(air.getNumber());
+                    if(air.getScheduledLandingTime() > last.getScheduledLandingTime() + time){
+                        air.setScheduledLandingTime(last.getScheduledLandingTime() + time);
+                    }
+                }else{
+                    air.setScheduledLandingTime(0);
+                }
+                last = air;
+            }
+            return sol;
+        }
 	public ArrayList<Solution> getPopulation() {
 		return population;
 	}

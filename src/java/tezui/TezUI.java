@@ -73,7 +73,7 @@ public class TezUI extends JApplet {
 //            }
 //        });
         
-        Panel1 panel = new Panel1();
+        Panel11 panel = new Panel11();
         panel.setPreferredSize(new Dimension(JFXPANEL_WIDTH_INT, JFXPANEL_HEIGHT_INT));
         add(panel, BorderLayout.CENTER);
         
